@@ -1,8 +1,10 @@
-import { InputHTMLAttributes, JSX } from 'react'
+'use client'
+
+import { InputHTMLAttributes, ReactNode } from 'react'
 
 
 type Props = {
-  icon?: JSX
+  icon?: ReactNode
 } & InputHTMLAttributes<HTMLInputElement>
 
 export const TextField = ( { icon, ...inputProps }: Props ) => {
