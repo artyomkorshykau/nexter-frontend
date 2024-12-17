@@ -6,15 +6,19 @@ import { Button } from '@/shared/components/Button'
 import { authStore } from '@/features/auth/model/auth.store'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { registerSchema } from '@/features/auth/register/model/register.schema'
+import { RegisterDataType, registerSchema } from '@/features/auth/register/model/register.schema'
 
 
 export const RegisterForm = () => {
   
   const { toggleAuthWidget } = authStore()
-  const { register, handleSubmit, formState: { errors } } = useForm( { resolver: zodResolver( registerSchema ) } )
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm<RegisterDataType>( { resolver: zodResolver( registerSchema ) } )
   
-  const onSubmit = data => console.log( errors )
+  const onSubmit = ( data: RegisterDataType ) => console.log( data )
   
   return (
     <div className={ `w-[40%] h-full flex justify-center items-start flex-col gap-8 slide-in-right` }>
