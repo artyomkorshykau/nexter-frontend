@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Montserrat } from 'next/font/google'
 import { ReactNode } from 'react'
 import '@/styles/globals.css'
+import Providers from '@/app/providers'
 
 
 const montserrat = Montserrat( {
@@ -24,7 +25,9 @@ export default function RootLayout( {
     <body
       className={ `${ montserrat.variable } ${ montserrat.variable } antialiased` }
     >
-    { children }
+    <Providers>
+      { children }
+    </Providers>
     </body>
     </html>
   )

@@ -1,10 +1,10 @@
 'use client'
 
-import { authStore } from '@/features/auth/model/auth.store'
-import { LoginForm } from '@/features/auth/login/LoginForm'
-import { LoginImage } from '@/features/auth/login/LoginImage'
-import { RegisterImage } from '@/features/auth/register/RegisterImage'
-import { RegisterForm } from '@/features/auth/register/RegisterForm'
+import { authStore } from '@/features/auth/model/authStore'
+import { LoginForm } from '@/features/auth/ui/login/LoginForm'
+import { LoginImage } from '@/features/auth/ui/login/LoginImage'
+import { RegisterImage } from '@/features/auth/ui/register/RegisterImage'
+import { RegisterForm } from '@/features/auth/ui/register/RegisterForm'
 
 
 export const AuthWidget = () => {
