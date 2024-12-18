@@ -3,10 +3,12 @@
 import { TextField } from '@/shared/components/TextField'
 import { KeyRound, UserRound, UserRoundPen } from 'lucide-react'
 import { Button } from '@/shared/components/Button'
-import { authStore } from '@/features/auth/model/auth.store'
+import { authStore } from '@/features/auth/model/authStore'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { RegisterDataType, registerSchema } from '@/features/auth/register/model/register.schema'
+import { useMutation } from '@tanstack/react-query'
+import { authService } from '@/features/auth/service/authService'
+import { RegisterDataType, registerSchema } from '@/features/auth/model/register.schema'
 
 
 export const RegisterForm = () => {
@@ -18,7 +20,13 @@ export const RegisterForm = () => {
     formState: { errors }
   } = useForm<RegisterDataType>( { resolver: zodResolver( registerSchema ) } )
   
-  const onSubmit = ( data: RegisterDataType ) => console.log( data )
+  const { mutate } = useMutation( {
+    mutationFn: authService.register,
+    mutationKey: [ 'register' ],
+    onSuccess: () => {alert( 'success' )}
+  } )
+  
+  const onSubmit = ( data: RegisterDataType ) => mutate( data )
   
   return (
     <div className={ `w-[40%] h-full flex justify-center items-start flex-col gap-8 slide-in-right` }>
@@ -39,9 +47,9 @@ export const RegisterForm = () => {
           icon={ <UserRoundPen color="#3c41b8"/> }
         />
         <TextField
-          error={ errors?.nickname?.message }
+          error={ errors?.username?.message }
           placeholder={ 'Никнейм' }
-          register={ register( 'nickname' ) }
+          register={ register( 'username' ) }
           icon={ <UserRound color="#3c41b8"/> }
         />
         <TextField
