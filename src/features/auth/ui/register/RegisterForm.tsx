@@ -11,10 +11,10 @@ import { authService } from '@/features/auth/service/authService'
 import { RegisterDataType, registerSchema } from '@/features/auth/model/register.schema'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { AxiosError } from 'axios'
 
 
 export const RegisterForm = () => {
-  
   
   const {
     register,
@@ -25,17 +25,15 @@ export const RegisterForm = () => {
   
   const { toggleAuthWidget } = authStore()
   watch( () => setError( null ) )
-  const [ error, setError ] = useState( null )
+  const [ error, setError ] = useState<RegisterDataType | null>( null )
   const { push } = useRouter()
   
   const { mutate, isPending } = useMutation( {
     mutationFn: authService.register,
     mutationKey: [ 'register' ],
     onSuccess: () => {push( '/dashboard' )},
-    onError: ( data ) => {setError( data.response.data.message )}
+    onError: ( data: AxiosError<{ message: RegisterDataType }> ) => {setError( data?.response?.data?.message|| null )}
   } )
-  
-  
   
   const onSubmit = ( data: RegisterDataType ) => mutate( data )
   

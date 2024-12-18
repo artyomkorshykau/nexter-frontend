@@ -11,6 +11,7 @@ import { useMutation } from '@tanstack/react-query'
 import { authService } from '@/features/auth/service/authService'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { AxiosError } from 'axios'
 
 
 export const LoginForm = () => {
@@ -24,14 +25,14 @@ export const LoginForm = () => {
   
   const { toggleAuthWidget } = authStore()
   watch( () => setError( null ) )
-  const [ error, setError ] = useState( null )
+  const [ error, setError ] = useState<LoginDataType | null>( null )
   const { push } = useRouter()
   
   const { mutate, isPending } = useMutation( {
     mutationFn: authService.login,
     mutationKey: [ 'login' ],
     onSuccess: () => {push( '/dashboard' )},
-    onError: ( data ) => {setError( data.response.data.message )}
+    onError: ( data: AxiosError<{ message: LoginDataType }> ) => {setError( data?.response?.data?.message || null )}
   } )
   
   const onSubmit = ( data: LoginDataType ) => mutate( data )
