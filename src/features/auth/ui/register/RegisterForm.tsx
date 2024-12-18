@@ -9,22 +9,33 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 import { authService } from '@/features/auth/service/authService'
 import { RegisterDataType, registerSchema } from '@/features/auth/model/register.schema'
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 
 export const RegisterForm = () => {
   
-  const { toggleAuthWidget } = authStore()
+  
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors }
   } = useForm<RegisterDataType>( { resolver: zodResolver( registerSchema ) } )
   
-  const { mutate } = useMutation( {
+  const { toggleAuthWidget } = authStore()
+  watch( () => setError( null ) )
+  const [ error, setError ] = useState( null )
+  const { push } = useRouter()
+  
+  const { mutate, isPending } = useMutation( {
     mutationFn: authService.register,
     mutationKey: [ 'register' ],
-    onSuccess: () => {alert( 'success' )}
+    onSuccess: () => {push( '/dashboard' )},
+    onError: ( data ) => {setError( data.response.data.message )}
   } )
+  
+  
   
   const onSubmit = ( data: RegisterDataType ) => mutate( data )
   
@@ -47,7 +58,7 @@ export const RegisterForm = () => {
           icon={ <UserRoundPen color="#3c41b8"/> }
         />
         <TextField
-          error={ errors?.username?.message }
+          error={ errors?.username?.message || error?.username }
           placeholder={ 'Никнейм' }
           register={ register( 'username' ) }
           icon={ <UserRound color="#3c41b8"/> }
@@ -59,7 +70,7 @@ export const RegisterForm = () => {
           type={ 'password' }
           icon={ <KeyRound color="#3c41b8"/> }
         />
-        <Button text={ 'Зарегистрироваться' }/>
+        <Button text={ 'Зарегистрироваться' } disabled={ isPending }/>
       </form>
       
       <div className={ `flex gap-2` }>

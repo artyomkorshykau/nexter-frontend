@@ -11,7 +11,7 @@ type Props = {
 export const Button = ( { text, icon, ...buttonProps }: Props ) => {
   return (
     <button
-      className={ `flex justify-center items-center gap-4 h-14 bg-gradient-to-tr from-background to-primary rounded-[5px] px-10 py-5 text-white active:opacity-85` }
+      className={ `flex justify-center items-center gap-4 h-14 bg-gradient-to-tr from-background to-primary rounded-[5px] px-10 py-5 text-white active:opacity-85 ${ buttonProps.disabled ? 'opacity-20 cursor-not-allowed active:opacity-20' : '' }` }
       { ...buttonProps }
     >
       { icon }

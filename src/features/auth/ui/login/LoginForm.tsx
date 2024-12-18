@@ -9,23 +9,29 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { LoginDataType, loginSchema } from '@/features/auth/model/login.schema'
 import { useMutation } from '@tanstack/react-query'
 import { authService } from '@/features/auth/service/authService'
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 
 export const LoginForm = () => {
   
-  const { toggleAuthWidget } = authStore()
-  
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors }
   } = useForm<LoginDataType>( { resolver: zodResolver( loginSchema ) } )
   
+  const { toggleAuthWidget } = authStore()
+  watch( () => setError( null ) )
+  const [ error, setError ] = useState( null )
+  const { push } = useRouter()
   
-  const { mutate } = useMutation( {
+  const { mutate, isPending } = useMutation( {
     mutationFn: authService.login,
     mutationKey: [ 'login' ],
-    onSuccess: () => {alert( 'success' )}
+    onSuccess: () => {push( '/dashboard' )},
+    onError: ( data ) => {setError( data.response.data.message )}
   } )
   
   const onSubmit = ( data: LoginDataType ) => mutate( data )
@@ -39,19 +45,19 @@ export const LoginForm = () => {
         onSubmit={ handleSubmit( onSubmit ) }
       >
         <TextField
-          error={ errors?.username?.message }
+          error={ errors?.username?.message || error?.username }
           placeholder={ 'Никнейм' }
           register={ register( 'username' ) }
           icon={ <UserRound color="#3c41b8"/> }
         />
         <TextField
-          error={ errors?.password?.message }
+          error={ errors?.password?.message || error?.password }
           placeholder={ 'Пароль' }
           type={ 'password' }
           register={ register( 'password' ) }
           icon={ <KeyRound color="#3c41b8"/> }
         />
-        <Button text={ 'Войти' }/>
+        <Button text={ 'Войти' } disabled={ isPending }/>
       </form>
       
       <div className={ `flex gap-2` }>
