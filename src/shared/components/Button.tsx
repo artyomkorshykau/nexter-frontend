@@ -6,7 +6,7 @@ import { ButtonHTMLAttributes, ReactNode } from 'react'
 type Props = {
   icon?: ReactNode
   text: string
-  className: string
+  className?: string
 } & ButtonHTMLAttributes<HTMLButtonElement>
 
 export const Button = ( { text, icon, className, ...buttonProps }: Props ) => {

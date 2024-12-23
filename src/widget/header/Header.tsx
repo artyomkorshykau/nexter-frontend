@@ -1,4 +1,4 @@
-import { BicepsFlexed, CalendarDays, Rss, SunMoon } from 'lucide-react'
+import {  CalendarDays, Rss, SunMoon } from 'lucide-react'
 import { Rubik_Mono_One } from 'next/font/google'
 
 
