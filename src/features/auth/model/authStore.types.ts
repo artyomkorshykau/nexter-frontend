@@ -1,11 +1,9 @@
-
-
 type State = {
-  isLogin: boolean
+	isLogin: boolean
 }
 
 type Actions = {
-  toggleAuthWidget: () => void
+	toggleAuthWidget: () => void
 }
 
 export type AuthStoreType = State & Actions
